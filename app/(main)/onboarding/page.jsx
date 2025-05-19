@@ -12,7 +12,7 @@ export default async function OnboardingPage() {
   }
 
   return (
-    <main>
+    <main className="min-h-screen w-full overflow-y-auto pb-10">
       <OnboardingForm industries={industries} />
     </main>
   );

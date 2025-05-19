@@ -65,11 +65,10 @@ const DashboardView = ({ insights }) => {
 
   const OutlookIcon = getMarketOutlookInfo(insights.marketOutlook).icon;
   const outlookColor = getMarketOutlookInfo(insights.marketOutlook).color;
-
   // Format dates using date-fns
   const lastUpdatedDate = format(new Date(insights.lastUpdated), "dd/MM/yyyy");
   const nextUpdateDistance = formatDistanceToNow(
-    new Date(insights.nextUpdate),
+    new Date(insights.nextUpdated),
     { addSuffix: true }
   );
 

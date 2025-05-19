@@ -51,13 +51,11 @@ export async function getIndustryInsights() {
 
   // If no insights exist, generate them
   if (!user.industryInsight) {
-    const insights = await generateAIInsights(user.industry);
-
-    const industryInsight = await db.industryInsight.create({
+    const insights = await generateAIInsights(user.industry);    const industryInsight = await db.industryInsight.create({
       data: {
         industry: user.industry,
         ...insights,
-        nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        nextUpdated: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       },
     });
 

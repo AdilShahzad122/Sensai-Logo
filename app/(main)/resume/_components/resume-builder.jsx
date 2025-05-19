@@ -90,18 +90,32 @@ export default function ResumeBuilder({ initialContent }) {
       parts.push(`💼 [LinkedIn](${contactInfo.linkedin})`);
     if (contactInfo.twitter) parts.push(`🐦 [Twitter](${contactInfo.twitter})`);
 
+    const userName = user?.fullName || "";
+
     return parts.length > 0
-      ? `## <div align="center">${user.fullName}</div>
-        \n\n<div align="center">\n\n${parts.join(" | ")}\n\n</div>`
-      : "";
+      ? `# ${userName}
+
+${parts.join(" | ")}`
+      : userName ? `# ${userName}` : "";
   };
 
   const getCombinedContent = () => {
     const { summary, skills, experience, education, projects } = formValues;
+    
+    // Format skills as a bullet list if it's not already formatted
+    let formattedSkills = skills;
+    if (skills && !skills.includes('*') && !skills.includes('-')) {
+      // Convert comma-separated skills to bullet points if needed
+      const skillsArray = skills.split(',').map(skill => skill.trim()).filter(Boolean);
+      if (skillsArray.length > 1) {
+        formattedSkills = skillsArray.map(skill => `* ${skill}`).join('\n');
+      }
+    }
+    
     return [
       getContactMarkdown(),
       summary && `## Professional Summary\n\n${summary}`,
-      skills && `## Skills\n\n${skills}`,
+      formattedSkills && `## Skills\n\n${formattedSkills}`,
       entriesToMarkdown(experience, "Work Experience"),
       entriesToMarkdown(education, "Education"),
       entriesToMarkdown(projects, "Projects"),

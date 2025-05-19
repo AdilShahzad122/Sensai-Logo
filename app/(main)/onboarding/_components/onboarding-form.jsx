@@ -31,6 +31,13 @@ import { onboardingSchema } from "@/app/lib/schema";
 import { updateUser } from "@/actions/user";
 
 const OnboardingForm = ({ industries }) => {
+  // Add client-side only rendering to prevent hydration errors
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const router = useRouter();
   const [selectedIndustry, setSelectedIndustry] = useState(null);
 
@@ -75,9 +82,30 @@ const OnboardingForm = ({ industries }) => {
 
   const watchIndustry = watch("industry");
 
+  // Display a loading state while client-side hydration is happening
+  if (!isClient) {
+    return (
+      <div className="flex items-center justify-center bg-background min-h-screen">
+        <Card className="w-full max-w-lg mx-2">
+          <CardHeader>
+            <CardTitle className="gradient-title text-4xl">
+              Complete Your Profile
+            </CardTitle>
+            <CardDescription>
+              Loading form...
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex items-center justify-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex items-center justify-center bg-background">
-      <Card className="w-full max-w-lg mt-10 mx-2">
+    <div className="flex items-center justify-center bg-background py-6">
+      <Card className="w-full max-w-lg mx-2">
         <CardHeader>
           <CardTitle className="gradient-title text-4xl">
             Complete Your Profile

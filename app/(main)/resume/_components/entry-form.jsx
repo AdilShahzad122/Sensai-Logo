@@ -44,6 +44,10 @@ export function EntryForm({ type, entries, onChange }) {
       organization: "",
       startDate: "",
       endDate: "",
+      startMonth: "",
+      startYear: "",
+      endMonth: "",
+      endYear: "",
       description: "",
       current: false,
     },
@@ -166,10 +170,56 @@ export function EntryForm({ type, entries, onChange }) {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
+                <div className="flex space-x-2">
+                  {/* Month selector */}
+                  <select 
+                    className="px-3 py-2 border rounded-md w-1/2"
+                    {...register("startMonth")}
+                    onChange={(e) => {
+                      const year = watch("startYear") || new Date().getFullYear();
+                      const month = e.target.value.padStart(2, '0');
+                      setValue("startDate", `${year}-${month}`);
+                    }}
+                  >
+                    <option value="">Month</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                  </select>
+                  
+                  {/* Year selector */}
+                  <select 
+                    className="px-3 py-2 border rounded-md w-1/2"
+                    {...register("startYear")}
+                    onChange={(e) => {
+                      const month = watch("startMonth") || "01";
+                      const year = e.target.value;
+                      setValue("startDate", `${year}-${month}`);
+                    }}
+                  >
+                    <option value="">Year</option>
+                    {Array.from({ length: 50 }, (_, i) => {
+                      const year = new Date().getFullYear() - i;
+                      return (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
                 <Input
-                  type="month"
+                  type="hidden"
                   {...register("startDate")}
-                  error={errors.startDate}
                 />
                 {errors.startDate && (
                   <p className="text-sm text-red-500">
@@ -177,12 +227,60 @@ export function EntryForm({ type, entries, onChange }) {
                   </p>
                 )}
               </div>
+              
               <div className="space-y-2">
+                <div className="flex space-x-2">
+                  {/* Month selector */}
+                  <select 
+                    className="px-3 py-2 border rounded-md w-1/2"
+                    {...register("endMonth")}
+                    onChange={(e) => {
+                      const year = watch("endYear") || new Date().getFullYear();
+                      const month = e.target.value.padStart(2, '0');
+                      setValue("endDate", `${year}-${month}`);
+                    }}
+                    disabled={current}
+                  >
+                    <option value="">Month</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                  </select>
+                  
+                  {/* Year selector */}
+                  <select 
+                    className="px-3 py-2 border rounded-md w-1/2"
+                    {...register("endYear")}
+                    onChange={(e) => {
+                      const month = watch("endMonth") || "01";
+                      const year = e.target.value;
+                      setValue("endDate", `${year}-${month}`);
+                    }}
+                    disabled={current}
+                  >
+                    <option value="">Year</option>
+                    {Array.from({ length: 50 }, (_, i) => {
+                      const year = new Date().getFullYear() - i;
+                      return (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
                 <Input
-                  type="month"
+                  type="hidden"
                   {...register("endDate")}
-                  disabled={current}
-                  error={errors.endDate}
                 />
                 {errors.endDate && (
                   <p className="text-sm text-red-500">
